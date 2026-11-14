@@ -9,7 +9,7 @@
 ; The app window (native/launcher.cs), and the server it runs hidden (server.js).
 #define AppExe "TabletDeck.exe"
 #define ServerExe "TabletDeckServer.exe"
-#define RepoUrl "https://github.com/nodieCode/tablet-deck"
+#define RepoUrl "https://github.com/Aur1n/tablet-deck"
 #define FirewallRule "Tablet Deck"
 
 [Setup]

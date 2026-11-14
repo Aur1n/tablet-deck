@@ -110,12 +110,13 @@ static class Lang
     const string Key = @"Software\Tablet Deck";
     // [code, name] in the order the Settings window lists them; "" is Automatic.
     public static readonly string[][] Choices = {
-        new[] { "", "Automatic" }, new[] { "en", "English" }, new[] { "es", "Español" }, new[] { "fr", "Français" }, new[] { "de", "Deutsch" },
+        new[] { "", "Automatic" }, new[] { "en", "English" }, new[] { "es", "Español" }, new[] { "fr", "Français" }, new[] { "de", "Deutsch" }, new[] { "hu", "Magyar" },
     };
-    static readonly string[] Columns = { "es", "fr", "de" };
+    static readonly string[] Columns = { "es", "fr", "de", "hu" };
+    const int Hungarian = 3; // its text is in hu, not in table's rows
     static int column = -1; // in the tables' rows; -1 is English
 
-    // The saved choice: "", "en", "es", "fr" or "de".
+    // The saved choice: "", "en", "es", "fr", "de" or "hu".
     public static string Saved
     {
         get
@@ -146,8 +147,14 @@ static class Lang
 
     public static string T(string text)
     {
+        if (column < 0 || text == null) return text;
+        if (column == Hungarian)
+        {
+            string hit;
+            return hu.TryGetValue(text, out hit) ? hit : text;
+        }
         string[] row;
-        return column >= 0 && text != null && table.TryGetValue(text, out row) ? row[column] : text;
+        return table.TryGetValue(text, out row) ? row[column] : text;
     }
 
     // T with "{0}", "{1}" filled in.
@@ -349,6 +356,201 @@ static class Lang
         { "Up to 12 links, please.", new[] { "Como máximo 12 enlaces, por favor.", "12 liens au maximum, s'il vous plaît.", "Höchstens 12 Links, bitte." } },
         { "The pairing code can only have letters and numbers (up to 32).", new[] { "El código de emparejamiento solo puede tener letras y números (hasta 32).", "Le code d'appairage ne peut contenir que des lettres et des chiffres (32 au maximum).", "Der Kopplungscode darf nur Buchstaben und Ziffern haben (bis zu 32)." } },
         { "The voice language should look like en-US.", new[] { "El idioma de voz debe tener la forma en-US.", "La langue vocale doit ressembler à en-US.", "Die Sprache für Befehle sollte wie en-US aussehen." } },
+    };
+
+    // English -> Magyar, kept apart from table so upstream changes to it merge without conflicts.
+    static readonly Dictionary<string, string> hu = new Dictionary<string, string>
+    {
+        // ---- the main window ----
+        { "STAR CITIZEN CONTROL DECK", "STAR CITIZEN VEZÉRLŐPULT" },
+        { "STARTING", "INDUL" },
+        { "ONLINE", "ONLINE" },
+        { "TEST MODE", "TESZT MÓD" },
+        { "STOPPED", "LEÁLLT" },
+        { "UPTIME", "FUTÁSIDŐ" },
+        { "CONNECT", "CSATLAKOZÁS" },
+        { "LINK", "KAPCSOLAT" },
+        { "TELEMETRY", "TELEMETRIA" },
+        { "VOICE", "HANG" },
+        { "SYSTEM", "RENDSZER" },
+        { "LOG", "NAPLÓ" },
+        { "NO NETWORK FOUND", "NINCS HÁLÓZAT" },
+        { "OFFLINE", "OFFLINE" },
+        { "WAITING FOR THE SERVER", "VÁRAKOZÁS A SZERVERRE" },
+        { "SCAN WITH YOUR TABLET'S CAMERA", "OLVASD BE A TABLET KAMERÁJÁVAL" },
+        { "ADDRESS", "CÍM" },
+        { "No network found. Connect this PC to Wi-Fi or a network.", "Nincs hálózat. Csatlakoztasd ezt a PC-t Wi-Fihez vagy hálózathoz." },
+        { "Windows treats \"{0}\" as Public: tablets can't connect.", "\"{0}\" nyilvános hálózat: a tablet nem csatlakozhat." },
+        { "ALSO", "MÉG" },
+        { "PAIRING CODE", "PÁROSÍTÓKÓD" },
+        { "TABLETS", "TABLETEK" },
+        { "CONNECTED", "CSATLAKOZVA" },
+        { "KEYS GO TO", "BILLENTYŰK CÉLJA" },
+        { "LOG ONLY", "CSAK NAPLÓ" },
+        { "ANY WINDOW", "BÁRMELY ABLAK" },
+        { "TEST MODE: NO KEYS SENT", "TESZT: NEM KÜLD" },
+        { "ONLY WHILE IT'S IN FRONT", "CSAK HA ELŐTÉRBEN VAN" },
+        { "FOCUS CHECK IS OFF", "FÓKUSZ-ELLENŐRZÉS KI" },
+        { "PRESSES", "NYOMÁSOK" },
+        { "LAST: {0}", "UTOLSÓ: {0}" },
+        { "NONE YET", "MÉG NINCS" },
+        { "{0} BLOCKED", "{0} BLOKKOLVA" },
+        { "STRICTNESS", "SZIGORÚSÁG" },
+        { "Lower accepts more but may mishear. Higher is stricter.", "Alacsony: többet elfogad, de félrehallhat. Magas: szigorúbb." },
+        { "Starting...", "Indul..." },
+        { "Starting the server...", "A szerver indul..." },
+        { "Running", "Fut" },
+        { "Running in test mode (dry run): no keys are sent", "Teszt módban fut (dry run): nem küld billentyűt" },
+        { "Stopped: {0}", "Leállt: {0}" },
+        { "{0} is missing. Reinstall Tablet Deck.", "Hiányzik: {0}. Telepítsd újra a Tablet Decket." },
+        { "Couldn't start the server: {0}", "Nem sikerült elindítani a szervert: {0}" },
+        { "The server stopped (exit code {0}). See the log below.", "A szerver leállt (kilépési kód: {0}). Lásd a lenti naplót." },
+        { "Off", "Kikapcsolva" },
+        { "Ready: {0} phrases, {1}", "Kész: {0} kifejezés, {1}" },
+        { ", push-to-talk: {0}", ", push-to-talk: {0}" },
+        { "Turned off in settings", "A beállításokban kikapcsolva" },
+        { "Restarting...", "Újraindul..." },
+        { "Unavailable: {0}", "Nem elérhető: {0}" },
+        { "Last heard: \"{0}\", {1}% sure. Pressed {2}.", "Utoljára hallott: \"{0}\", {1}% biztos. Lenyomva: {2}." },
+        { "Last heard: \"{0}\", {1}% sure. Below {2}%, so it was ignored.", "Utoljára hallott: \"{0}\", {1}% biztos. {2}% alatt van, ezért kihagyva." },
+        { "Last heard: something that isn't one of the commands.", "Utoljára hallott: valami, ami nem parancs." },
+        { "Tablet Deck (stopped)", "Tablet Deck (leállt)" },
+        { " (test mode)", " (teszt mód)" },
+        { "Windows treats \"{0}\" as a Public network, so tablets can't connect. In Windows: Settings > Network & Internet > {0} > set it to Private.", "A Windows a(z) \"{0}\" hálózatot nyilvánosnak tekinti, ezért a tabletek nem tudnak csatlakozni. A Windowsban: Gépház > Hálózat és internet > {0} > állítsd Magánra." },
+        { "Tablets can't connect", "A tabletek nem tudnak csatlakozni" },
+        { "Windows treats \"{0}\" as a Public network. Open Tablet Deck to fix it.", "A Windows a(z) \"{0}\" hálózatot nyilvánosnak tekinti. Nyisd meg a Tablet Decket a javításhoz." },
+        { "Restarting the server for the new settings...", "A szerver újraindul az új beállításokkal..." },
+        { "Couldn't save the settings: {0}", "Nem sikerült menteni a beállításokat: {0}" },
+        { "Tablet Deck isn't running", "A Tablet Deck nem fut" },
+        { "Start it first; the layout editor is part of the server.", "Előbb indítsd el; az elrendezés-szerkesztő a szerver része." },
+        { "Tablet Deck is still running", "A Tablet Deck tovább fut" },
+        { "Double-click the tray icon to open it, or right-click it to quit.", "Kattints duplán a tálcaikonra a megnyitáshoz, vagy jobb gombbal a kilépéshez." },
+
+        // ---- the main window's buttons, switches and links ----
+        { "Copy link", "Link másolása" },
+        { "Copied!", "Másolva!" },
+        { "Settings", "Beállítások" },
+        { "Edit layout", "Elrendezés szerk." },
+        { "Restart", "Újraindítás" },
+        { "Commands", "Parancsok" },
+        { "Start with Windows (in the tray)", "Indítás a Windowszal (a tálcán)" },
+        { "Check for updates automatically", "Frissítések automatikus keresése" },
+        { "Settings folder", "Beállítások mappa" },
+        { "Check for updates now", "Frissítés keresése most" },
+        { "Feedback & ideas", "Visszajelzés, ötletek" },
+        { "Set it to Private ›", "Állítsd Magánra ›" },
+        { "What's new", "Újdonságok" },
+        { "Update now", "Frissítés most" },
+        { "Later", "Később" },
+        { "Close", "Bezárás" },
+        { "Show Tablet Deck", "Tablet Deck megjelenítése" },
+        { "Quit", "Kilépés" },
+        { "Opens the deck in this PC's browser", "Megnyitja a decket ennek a PC-nek a böngészőjében" },
+        { "Copies the address with the pairing code, to send to a tablet", "Kimásolja a címet a párosítókóddal, hogy elküldhesd a tabletre" },
+        { "Pairing code, port, focus check, tap length, voice language and the Star Citizen keybind profile", "Párosítókód, port, fókusz-ellenőrzés, koppintás hossza, hangparancs nyelve és a Star Citizen keybind profil" },
+        { "Opens the layout editor in your browser: move buttons, change their keys, labels and icons", "Megnyitja az elrendezés-szerkesztőt a böngészőben: gombok mozgatása, billentyűik, feliratuk és ikonjuk módosítása" },
+        { "Everything you can say, and the button each one presses", "Minden, amit mondhatsz, és hogy melyik gombot nyomja" },
+        { "Looks for a new version on GitHub when Tablet Deck starts and once a day. Updates only install when you click Update now.", "Induláskor és naponta egyszer új verziót keres a GitHubon. Csak akkor telepít, ha a Frissítés most gombra kattintasz." },
+        { "Opens the folder with config.json and your own layouts", "Megnyitja a config.json-t és a saját elrendezéseidet tartalmazó mappát" },
+        { "Report a problem or suggest an idea on GitHub", "Hiba bejelentése vagy ötlet a GitHubon" },
+        { "Pick your network there and set its network profile to Private", "Ott válaszd ki a hálózatodat, és állítsd a hálózati profilját Magánra" },
+
+        // ---- updates ----
+        { "Couldn't check for updates", "Nem sikerült frissítést keresni" },
+        { "GitHub didn't answer.", "A GitHub nem válaszolt." },
+        { "Tablet Deck is up to date", "A Tablet Deck naprakész" },
+        { "You have version {0}, the latest.", "A(z) {0} verzió van fent, ez a legújabb." },
+        { "Update not ready yet", "A frissítés még nincs kész" },
+        { "Version {0} is out, but its installer isn't attached yet. Try again in a few minutes.", "A(z) {0} verzió megjelent, de a telepítője még nincs feltöltve. Próbáld újra pár perc múlva." },
+        { "Tablet Deck {0} is available (you have {1}).", "Elérhető a Tablet Deck {0} (neked {1} van fent)." },
+        { "Tablet Deck {0} is available", "Elérhető a Tablet Deck {0}" },
+        { "Open Tablet Deck and click Update now.", "Nyisd meg a Tablet Decket, és kattints a Frissítés most gombra." },
+        { "Downloading Tablet Deck {0}...", "A Tablet Deck {0} letöltése..." },
+        { "Checking the download...", "A letöltés ellenőrzése..." },
+        { "Installing Tablet Deck {0}. Allow the Windows prompt to continue.", "A Tablet Deck {0} telepítése. Engedélyezd a Windows kérdését a folytatáshoz." },
+        { "the download failed ({0})", "a letöltés nem sikerült ({0})" },
+        { "the download didn't match its checksum, so it wasn't installed", "a letöltés ellenőrzőösszege nem egyezett, ezért nem települt" },
+        { "couldn't check the download ({0})", "nem sikerült ellenőrizni a letöltést ({0})" },
+        { "the Windows permission prompt was cancelled", "a Windows engedélykérését megszakították" },
+        { "the installer finished without updating", "a telepítő frissítés nélkül fejeződött be" },
+        { "the installer stopped (code {0}). Was the Windows prompt cancelled?", "a telepítő leállt (kód: {0}). Megszakítottad a Windows kérdését?" },
+        { "Update failed: {0}", "A frissítés nem sikerült: {0}" },
+        { "Updated to Tablet Deck {0}.", "Frissítve: Tablet Deck {0}." },
+
+        // ---- Voice commands window ----
+        { "Voice commands", "Hangparancsok" },
+        { "Voice commands (not running)", "Hangparancsok (nem fut)" },
+        { "Voice commands ({0})", "Hangparancsok ({0})" },
+        { "Voice commands ({0} of {1})", "Hangparancsok ({0} / {1})" },
+        { "COMMANDS", "PARANCSOK" },
+        { "Hold the mic button on the tablet and say one of these. Most Star Citizen controls are toggles, so \"engines on\" and \"engines off\" press the same key.", "Tartsd nyomva a tableten a mikrofon gombot, és mondd ki valamelyiket (angolul). A legtöbb vezérlő kapcsoló: az \"engines on\" és az \"engines off\" ugyanazt a billentyűt nyomja." },
+        { "Search, e.g. shields or quantum", "Keresés, pl. shields vagy quantum" },
+        { "Say", "Mondd" },
+        { "Presses", "Lenyomja" },
+
+        // ---- Install keybind profile window ----
+        { "Install keybind profile", "Keybind profil telepítése" },
+        { "STAR CITIZEN COPIES", "STAR CITIZEN PÉLDÁNYOK" },
+        { "Copies the Tablet Deck Keyboard profile into Star Citizen, so buttons for actions with no default key work. Tick the copies of the game to install it into.", "Bemásolja a Tablet Deck Keyboard profilt a Star Citizenbe, hogy az alapértelmezett billentyű nélküli akciók gombjai is működjenek. Jelöld be, melyik játékpéldányba telepítse." },
+        { "Choose game folder...", "Játékmappa kiválasztása..." },
+        { "STATUS", "ÁLLAPOT" },
+        { "Install", "Telepítés" },
+        { "The profile file is missing ({0}). Reinstall Tablet Deck.", "Hiányzik a profilfájl ({0}). Telepítsd újra a Tablet Decket." },
+        { "Star Citizen wasn't found in the usual places. Click \"Choose game folder...\" and pick the StarCitizen folder (the one with LIVE in it).", "A Star Citizen nem található a szokásos helyeken. Kattints a \"Játékmappa kiválasztása...\" gombra, és válaszd a StarCitizen mappát (amiben a LIVE van)." },
+        { "Found {0} copy of the game. Missing one? Click \"Choose game folder...\".", "{0} játékpéldány található. Hiányzik egy? Kattints a \"Játékmappa kiválasztása...\" gombra." },
+        { "Found {0} copies of the game. Missing one? Click \"Choose game folder...\".", "{0} játékpéldány található. Hiányzik egy? Kattints a \"Játékmappa kiválasztása...\" gombra." },
+        { "not installed", "nincs telepítve" },
+        { "already up to date", "már naprakész" },
+        { "older copy, will be replaced", "régebbi példány, lecseréli" },
+        { "Pick the StarCitizen folder (the one with LIVE in it).", "Válaszd a StarCitizen mappát (amiben a LIVE van)." },
+        { "That folder doesn't look like Star Citizen. Pick the StarCitizen folder, the one with LIVE in it.", "Ez a mappa nem tűnik Star Citizennek. Válaszd a StarCitizen mappát, amiben a LIVE van." },
+        { "Added. Tick the copies of the game to install the profile into, then click Install.", "Hozzáadva. Jelöld be, melyik játékpéldányba telepítse a profilt, majd kattints a Telepítés gombra." },
+        { "Nothing ticked. Tick the copies of the game to install the profile into.", "Nincs semmi bejelölve. Jelöld be, melyik játékpéldányba telepítse a profilt." },
+        { "Installed into {0}. ", "Telepítve ide: {0}. " },
+        { "Now, in Star Citizen: Options > Keybindings > Control Profiles, load \"Tablet Deck Keyboard\". ", "Most a Star Citizenben: Options > Keybindings > Control Profiles, töltsd be a \"Tablet Deck Keyboard\" profilt. " },
+        { "This replaces your current custom binds, so note any you want to keep and set them again afterwards.", "Ez lecseréli a jelenlegi saját kiosztásodat, ezért jegyezd fel, amit meg akarsz tartani, és utána állítsd be újra." },
+        { "Couldn't copy into {0}. Try running Tablet Deck as administrator, or copy {1} by hand.", "Nem sikerült bemásolni ide: {0}. Futtasd a Tablet Decket rendszergazdaként, vagy másold be kézzel: {1}." },
+
+        // ---- Settings window ----
+        { "Tablet Deck settings", "Tablet Deck beállítások" },
+        { "PAIRING", "PÁROSÍTÁS" },
+        { "Pairing code", "Párosítókód" },
+        { "New random code", "Új kód" },
+        { "Letters and numbers. Tablets already paired keep working until they reload; new ones need the new code.", "Betűk és számok. A már párosított tabletek újratöltésig működnek; az újakhoz az új kód kell." },
+        { "Port", "Port" },
+        { "Set with --port when Tablet Deck was started, so it can't be changed here.", "Induláskor --port kapcsolóval adták meg, ezért itt nem módosítható." },
+        { "Changing it restarts the server. Tablets then need the new address or QR code.", "Módosításkor a szerver újraindul. A tableteknek ezután az új cím vagy QR-kód kell." },
+        { "KEYS", "BILLENTYŰK" },
+        { "Only press keys while Star Citizen is in front", "Csak akkor nyomjon, ha a Star Citizen előtérben van" },
+        { "Keys never reach another window, like a browser or chat, by accident.", "A billentyűk így véletlenül sem jutnak más ablakba, például böngészőbe vagy chatbe." },
+        { "Tap length", "Koppintás hossza" },
+        { "milliseconds a tap holds the key. Raise it if the game misses taps.", "ezredmásodpercig tartja lenyomva a billentyűt. Növeld, ha a játék lekési." },
+        { "Voice language", "Hangparancs nyelve" },
+        { "Needs that English speech recognizer installed in Windows (Settings > Time & Language > Speech).", "Ehhez telepíteni kell a Windows angol beszédfelismerőjét (Gépház > Idő és nyelv > Beszéd)." },
+        { "Emotes also answer to one word, like \"wave\"", "Az emote-ok egy szóra is reagálnak, pl. \"wave\"" },
+        { "Without this, emotes need \"emote\" first (\"emote wave\"), so a stray word doesn't set one off.", "Enélkül az emote elé \"emote\" kell (\"emote wave\"), hogy egy elejtett szó ne indítsa el." },
+        { "PUSH-TO-TALK", "PUSH-TO-TALK" },
+        { "Key on this PC", "Billentyű ezen a PC-n" },
+        { "None", "Nincs" },
+        { "None: click to set", "Nincs: kattints a beállításhoz" },
+        { "Press a key or button...", "Nyomj meg egy billentyűt vagy gombot..." },
+        { "Mode", "Mód" },
+        { "Hold to talk", "Tartsd és beszélj" },
+        { "Press to start, again to stop", "Nyomd az indításhoz, újra a leállításhoz" },
+        { "Play a sound when it starts and stops listening", "Hang a figyelés indulásakor és végén" },
+        { "Pick a key Star Citizen doesn't use, like a mouse side button, a numpad key or F13-F24: the key still reaches the game.", "Olyan billentyűt válassz, amit a Star Citizen nem használ, pl. egér oldalgomb, numpad billentyű vagy F13-F24: a billentyű a játékhoz is eljut." },
+        { "LINKS", "LINKEK" },
+        { "Websites the tablet can open on this PC", "A tabletről nyitható oldalak" },
+        { "One per line: Name | https://address. The tablet only sees the names, so it can't open anything else.", "Soronként egy: Név | https://cím. A tablet csak a neveket látja, így mást nem tud megnyitni." },
+        { "Install keybind profile...", "Keybind profil telepítése..." },
+        { "Language", "Nyelv" },
+        { "Automatic", "Automatikus" },
+        { "Save", "Mentés" },
+        { "Cancel", "Mégse" },
+        { "This link isn't right:\n\n{0}\n\nWrite each one as: Name | https://address (names up to 24 characters).", "Ez a link nem jó:\n\n{0}\n\nÍrd így: Név | https://cím (a név legfeljebb 24 karakter)." },
+        { "Up to 12 links, please.", "Legfeljebb 12 link lehet." },
+        { "The pairing code can only have letters and numbers (up to 32).", "A párosítókód csak betűket és számokat tartalmazhat (legfeljebb 32-t)." },
+        { "The voice language should look like en-US.", "A hangparancs nyelve en-US formájú legyen." },
     };
 }
 
@@ -1289,9 +1491,10 @@ class DeckWindow : Form
     VoiceCommandsWindow commandsWindow;
 
     // ---- updates ----
-    const string LatestReleaseApi = "https://api.github.com/repos/nodieCode/tablet-deck/releases/latest";
-    const string ReleasesPage = "https://github.com/nodieCode/tablet-deck/releases";
-    const string DownloadPrefix = "https://github.com/nodieCode/tablet-deck/releases/download/";
+    // The Hungarian fork's own releases, so an update never swaps it for the English-only upstream.
+    const string LatestReleaseApi = "https://api.github.com/repos/Aur1n/tablet-deck/releases/latest";
+    const string ReleasesPage = "https://github.com/Aur1n/tablet-deck/releases";
+    const string DownloadPrefix = "https://github.com/Aur1n/tablet-deck/releases/download/";
     const string AppKey = @"Software\Tablet Deck";
     // This window's version, e.g. "1.1.0" (AssemblyInformationalVersion, set by scripts/build.js).
     static readonly string CurrentVersion = Application.ProductVersion;

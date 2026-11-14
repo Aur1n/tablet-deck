@@ -5,6 +5,16 @@ section becomes the notes of its
 [GitHub release](https://github.com/nodieCode/tablet-deck/releases), so add one
 before tagging a release.
 
+## 1.7.0-hu.1 (2026-11-14)
+
+- **Magyar nyelv:** a deck és a PC-s ablak magyarul is megjelenik. A tableten a
+  Deck beállítások → Nyelv alatt választható; a PC-s ablak a Windows nyelvét
+  követi, vagy a Beállítások → Nyelv választást. A játékos-szleng (Shields,
+  Quantum, Salvage, Mining, Power, Landing Gear...) és a hangparancsok angolul
+  maradnak.
+- A frissítések az Aur1n/tablet-deck fork kiadásaiból jönnek, így egy frissítés
+  nem cseréli le a magyar változatot az angol eredetire.
+
 ## 1.7.0 (2026-10-26)
 
 - **Cargo notes:** the Hauling & Exploration layout has a notepad panel next
