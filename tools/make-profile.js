@@ -50,6 +50,7 @@ const ACTIONMAPS = {
   v_view_look_behind: ["vehicle_general"],
 
   // Flight
+  v_flightready: ["spaceship_general"],
   v_ifcs_speed_limiter_reset_scm: ["spaceship_movement"],
   v_ifcs_toggle_esp: ["spaceship_movement"],
   v_ifcs_toggle_gforce_safety: ["spaceship_movement"],

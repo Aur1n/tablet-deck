@@ -437,13 +437,22 @@ function report(btn, kind, extra = {}) {
 // redrawn panels agree; buttons light up while their group is on. "set": true or false
 // sets it (Open/Close Doors), otherwise a press flips it. The deck can't see the game, so
 // this is only what Tablet Deck pressed: it starts all off, and tablets can reset it.
+// "with": { "on": { group: true|false }, "off": {...} } sets other groups too, once this
+// one turned on or off (power on brings weapons and shields up; Flight Ready, everything).
 const buttonStates = new Map(); // group -> true while on
+function setGroup(group, on) {
+  if (on) buttonStates.set(group, true); else buttonStates.delete(group);
+  for (const c of tablets) c.send({ t: "state", group, on });
+}
 function applyState(btn) {
   const s = btn.state;
   if (!s || typeof s.group !== "string") return;
   const on = typeof s.set === "boolean" ? s.set : !buttonStates.get(s.group);
-  if (on) buttonStates.set(s.group, true); else buttonStates.delete(s.group);
-  for (const c of tablets) c.send({ t: "state", group: s.group, on });
+  setGroup(s.group, on);
+  const linked = s.with && s.with[on ? "on" : "off"];
+  if (linked && typeof linked === "object") {
+    for (const [group, value] of Object.entries(linked)) if (typeof value === "boolean") setGroup(group, value);
+  }
 }
 
 // Presses a button's keys for `ms`, then releases them, unless the game isn't in front.

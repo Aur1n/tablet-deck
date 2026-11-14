@@ -278,13 +278,28 @@
               "anim": "ripple",
               "label": "Toggle Flight Ready",
               "state": {
-                "group": "flight-ready"
+                "group": "flight-ready",
+                "with": {
+                  "on": {
+                    "power": true,
+                    "weapons-power": true,
+                    "shield-power": true,
+                    "thruster-power": true
+                  },
+                  "off": {
+                    "power": false,
+                    "weapons-power": false,
+                    "shield-power": false,
+                    "thruster-power": false
+                  }
+                }
               },
               "voice": [
                 "flight ready",
                 "ready for flight"
               ],
-              "keys": "r",
+              "keys": "lalt+r",
+              "scAction": "v_flightready",
               "mode": "tap",
               "color": "green"
             },
@@ -345,6 +360,17 @@
             {
               "style": "quantum",
               "id": "vu-qt-engage",
+              "state": {
+                "group": "nav-mode",
+                "set": false,
+                "with": {
+                  "off": {
+                    "weapons-power": true,
+                    "shield-power": true,
+                    "thruster-power": true
+                  }
+                }
+              },
               "anim": "charge",
               "label": "Engage Quantum",
               "voice": [
@@ -924,7 +950,19 @@
           "anim": "ripple",
           "label": "PWR",
           "state": {
-            "group": "power"
+            "group": "power",
+            "with": {
+              "on": {
+                "weapons-power": true,
+                "shield-power": true,
+                "thruster-power": false
+              },
+              "off": {
+                "weapons-power": false,
+                "shield-power": false,
+                "thruster-power": false
+              }
+            }
           },
           "voice": [
             "power",
@@ -1035,13 +1073,28 @@
           "anim": "ripple",
           "label": "Toggle Flight Ready",
           "state": {
-            "group": "flight-ready"
+            "group": "flight-ready",
+            "with": {
+              "on": {
+                "power": true,
+                "weapons-power": true,
+                "shield-power": true,
+                "thruster-power": true
+              },
+              "off": {
+                "power": false,
+                "weapons-power": false,
+                "shield-power": false,
+                "thruster-power": false
+              }
+            }
           },
           "voice": [
             "flight ready",
             "ready for flight"
           ],
-          "keys": "r",
+          "keys": "lalt+r",
+          "scAction": "v_flightready",
           "mode": "tap",
           "color": "green",
           "x": 9,
@@ -1052,6 +1105,22 @@
         {
           "type": "button",
           "id": "qt-scm-nav",
+          "state": {
+            "group": "nav-mode",
+            "on": "NAV",
+            "off": "SCM",
+            "with": {
+              "on": {
+                "weapons-power": false,
+                "shield-power": false
+              },
+              "off": {
+                "weapons-power": true,
+                "shield-power": true,
+                "thruster-power": true
+              }
+            }
+          },
           "anim": "streak",
           "label": "SCM/NAV",
           "voice": [
@@ -1168,6 +1237,17 @@
           "type": "button",
           "style": "quantum",
           "id": "qt-engage",
+          "state": {
+            "group": "nav-mode",
+            "set": false,
+            "with": {
+              "off": {
+                "weapons-power": true,
+                "shield-power": true,
+                "thruster-power": true
+              }
+            }
+          },
           "anim": "charge",
           "label": "Engage Quantum",
           "voice": [
@@ -1236,6 +1316,17 @@
           "buttons": [
             {
               "id": "fa-scm",
+              "state": {
+                "group": "nav-mode",
+                "set": false,
+                "with": {
+                  "off": {
+                    "weapons-power": true,
+                    "shield-power": true,
+                    "thruster-power": true
+                  }
+                }
+              },
               "icon": "speed",
               "label": "Master: SCM",
               "voice": [
@@ -1249,6 +1340,17 @@
             },
             {
               "id": "fa-nav",
+              "state": {
+                "group": "nav-mode",
+                "set": true,
+                "on": "NAV",
+                "with": {
+                  "on": {
+                    "weapons-power": false,
+                    "shield-power": false
+                  }
+                }
+              },
               "anim": "streak",
               "icon": "quantum-mode",
               "label": "Master: NAV",

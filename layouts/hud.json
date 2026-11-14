@@ -70,14 +70,14 @@
       "title": "QT/Systems",
       "elements": [
         { "type": "header", "text": "Ship_systems", "x": 2, "y": 10 },
-        { "type": "button", "style": "tile", "icon": "power", "id": "qt-pwr", "anim": "ripple", "label": "PWR", "state": {"group": "power"}, "voice": ["power", "power on", "power off", "toggle power"], "keys": "u", "mode": "tap", "color": "green", "x": 1, "y": 35, "w": 117, "h": 72 },
+        { "type": "button", "style": "tile", "icon": "power", "id": "qt-pwr", "anim": "ripple", "label": "PWR", "state": {"group": "power", "with": {"on": {"weapons-power": true, "shield-power": true, "thruster-power": false}, "off": {"weapons-power": false, "shield-power": false, "thruster-power": false}}}, "voice": ["power", "power on", "power off", "toggle power"], "keys": "u", "mode": "tap", "color": "green", "x": 1, "y": 35, "w": 117, "h": 72 },
         { "type": "button", "style": "tile", "icon": "power-weapons", "id": "qt-wep", "anim": "ripple", "label": "WEP", "state": {"group": "weapons-power"}, "voice": ["weapons on", "weapons off", "enable weapons", "disable weapons", "toggle weapons"], "keys": "p", "verify": true, "mode": "tap", "color": "red", "x": 123, "y": 35, "w": 117, "h": 72 },
         { "type": "button", "style": "tile", "icon": "power-engines", "id": "qt-thr", "anim": "ripple", "label": "THR", "state": {"group": "thruster-power"}, "voice": ["engines", "engines on", "engines off", "turn on engines", "turn off engines", "toggle engines", "thrusters on", "thrusters off"], "keys": "i", "verify": true, "mode": "tap", "color": "blue", "x": 244, "y": 35, "w": 117, "h": 72 },
         { "type": "button", "style": "tile", "icon": "power-shields", "id": "qt-shld", "anim": "ripple", "label": "SHLD", "state": {"group": "shield-power"}, "voice": ["shields on", "shields off", "enable shields", "disable shields", "toggle shields"], "keys": "o", "verify": true, "mode": "tap", "color": "green", "x": 365, "y": 35, "w": 117, "h": 72 },
 
         { "type": "bracket", "x": 50, "y": 112, "w": 380, "h": 24 },
-        { "type": "button", "style": "hero", "id": "qt-flight-ready", "anim": "ripple", "label": "Toggle Flight Ready", "state": {"group": "flight-ready"}, "voice": ["flight ready", "ready for flight"], "keys": "r", "mode": "tap", "color": "green", "x": 9, "y": 157, "w": 461, "h": 72 },
-        { "type": "button", "id": "qt-scm-nav", "anim": "streak", "label": "SCM/NAV", "voice": ["switch master mode", "toggle master mode", "master mode"], "keys": "b", "verify": true, "mode": "tap", "x": 47, "y": 252, "w": 189, "h": 72 },
+        { "type": "button", "style": "hero", "id": "qt-flight-ready", "anim": "ripple", "label": "Toggle Flight Ready", "state": {"group": "flight-ready", "with": {"on": {"power": true, "weapons-power": true, "shield-power": true, "thruster-power": true}, "off": {"power": false, "weapons-power": false, "shield-power": false, "thruster-power": false}}}, "voice": ["flight ready", "ready for flight"], "keys": "lalt+r", "scAction": "v_flightready", "mode": "tap", "color": "green", "x": 9, "y": 157, "w": 461, "h": 72 },
+        { "type": "button", "id": "qt-scm-nav", "state": {"group": "nav-mode", "on": "NAV", "off": "SCM", "with": {"on": {"weapons-power": false, "shield-power": false}, "off": {"weapons-power": true, "shield-power": true, "thruster-power": true}}}, "anim": "streak", "label": "SCM/NAV", "voice": ["switch master mode", "toggle master mode", "master mode"], "keys": "b", "verify": true, "mode": "tap", "x": 47, "y": 252, "w": 189, "h": 72 },
         { "type": "menu", "label": "Oprt Mode", "title": "Operator mode", "x": 244, "y": 252, "w": 189, "h": 72,
           "options": [
             { "id": "op-flight", "icon": "ship", "label": "Flight", "voice": ["flight mode"], "keys": "ralt+f", "scAction": "v_set_flight_mode", "mode": "tap", "color": "green" },
@@ -88,7 +88,7 @@
             { "id": "op-mining", "icon": "mining", "label": "Mining", "keys": "ralt+m", "scAction": "v_set_mining_mode", "mode": "tap", "color": "amber" },
             { "id": "op-salvage", "icon": "salvage", "label": "Salvage", "voice": ["salvage mode"], "keys": "ralt+s", "scAction": "v_set_salvage_mode", "mode": "tap", "color": "amber" }
           ] },
-        { "type": "button", "style": "quantum", "id": "qt-engage", "anim": "charge", "label": "Engage Quantum", "voice": ["engage", "quantum jump", "jump"], "voiceMs": 1500, "keys": "b", "mode": "hold", "color": "blue", "x": 65, "y": 362, "w": 361, "h": 110 },
+        { "type": "button", "style": "quantum", "id": "qt-engage", "state": {"group": "nav-mode", "set": false, "with": {"off": {"weapons-power": true, "shield-power": true, "thruster-power": true}}}, "anim": "charge", "label": "Engage Quantum", "voice": ["engage", "quantum jump", "jump"], "voiceMs": 1500, "keys": "b", "mode": "hold", "color": "blue", "x": 65, "y": 362, "w": 361, "h": 110 },
 
         { "type": "danger-zone", "x": 2, "y": 512, "w": 478, "h": 92 },
         { "type": "slider", "id": "qt-eject", "label": "Slide to eject", "voice": false, "keys": "ralt+y", "verify": true, "mode": "timed", "ms": 600, "x": 21, "y": 532, "w": 292, "h": 58 },
@@ -100,8 +100,8 @@
       "title": "Flight Assist",
       "elements": [
         { "type": "grid", "x": 0, "y": 8, "w": 480, "h": 604, "cols": 3, "buttons": [
-          { "id": "fa-scm", "icon": "speed", "label": "Master: SCM", "voice": ["scm mode", "combat mode"], "keys": "ralt+insert", "scAction": "v_master_mode_set_scm", "mode": "tap", "color": "green" },
-          { "id": "fa-nav", "anim": "streak", "icon": "quantum-mode", "label": "Master: NAV", "voice": ["nav mode", "navigation mode"], "keys": "ralt+np_period", "scAction": "v_master_mode_set_nav", "mode": "tap", "color": "blue" },
+          { "id": "fa-scm", "state": {"group": "nav-mode", "set": false, "with": {"off": {"weapons-power": true, "shield-power": true, "thruster-power": true}}}, "icon": "speed", "label": "Master: SCM", "voice": ["scm mode", "combat mode"], "keys": "ralt+insert", "scAction": "v_master_mode_set_scm", "mode": "tap", "color": "green" },
+          { "id": "fa-nav", "state": {"group": "nav-mode", "set": true, "on": "NAV", "with": {"on": {"weapons-power": false, "shield-power": false}}}, "anim": "streak", "icon": "quantum-mode", "label": "Master: NAV", "voice": ["nav mode", "navigation mode"], "keys": "ralt+np_period", "scAction": "v_master_mode_set_nav", "mode": "tap", "color": "blue" },
           { "id": "fa-limiter", "icon": "speed", "label": "Speed Limiter", "state": {"group": "speed-limiter"}, "voice": ["speed limiter on", "speed limiter off", "toggle speed limiter"], "keys": "lalt+minus", "scAction": "v_ifcs_toggle_speed_limiter", "mode": "tap" },
           { "id": "fa-limiter-reset", "icon": "power-reset", "label": "Reset Limit", "voice": ["reset speed limit", "reset speed limiter"], "keys": "lalt+s", "scAction": "v_ifcs_speed_limiter_reset_scm", "mode": "tap" },
           { "id": "fa-range-up", "anim": "streak", "icon": "chev-up", "label": "Speed Range +", "voice": ["increase speed range"], "keys": "lalt+y", "scAction": "v_speed_range_up", "mode": "tap" },

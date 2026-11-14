@@ -17,13 +17,13 @@
   const flash = (t) => once(t._fx, el("span", "fx-flash"));
   const setState = (t, s) => { if (t._state) t._state.textContent = window.DeckI18n ? window.DeckI18n.t(s) : s; };
   // Lit look for stateful buttons whose animation has no state of its own (VTOL, ESP,
-  // door locks): the "on" border and glow, and ON/OFF (or the state's own "on" word).
-  // Buttons that only switch off ("set": false) never stay lit.
+  // door locks): the "on" border and glow, and ON/OFF (or the state's own "on" and "off"
+  // words). Buttons that only switch off ("set": false) never stay lit.
   function showPlain(t, on, def) {
     const s = def.state;
     if (s.set === false) return;
     t.classList.toggle("fx-on", on);
-    setState(t, on ? s.on || "ON" : s.set === true ? "" : "OFF");
+    setState(t, on ? s.on || "ON" : s.set === true ? "" : s.off || "OFF");
   }
 
   // Runs onProgress(0..1) for ms, then onDone; returns a cancel function.

@@ -183,6 +183,9 @@
   <action name="v_close_all_doors">
    <rebind input="kb1_rctrl+lbracket"/>
   </action>
+  <action name="v_flightready">
+   <rebind input="kb1_lalt+r"/>
+  </action>
   <action name="v_lock_all_doors">
    <rebind input="kb1_rctrl+rbracket"/>
   </action>

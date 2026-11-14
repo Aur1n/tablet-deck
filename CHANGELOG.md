@@ -5,6 +5,20 @@ section becomes the notes of its
 [GitHub release](https://github.com/nodieCode/tablet-deck/releases), so add one
 before tagging a release.
 
+## 1.7.0-hu.4 (2026-11-14)
+
+- **A Flight Ready gomb bal Alt + R-t nyom:** a Star Citizen jelenlegi
+  verziójában a sima R alcélpontot vált, a Flight Ready a bal Alt + R. A gomb a
+  játék Flight Ready akciójához is kötve van, így a Tablet Deck keybind profil is
+  tartalmazza.
+- **Összefüggő gombfények:** a PWR bekapcsolása a WEP és SHLD gombot is
+  ONLINE-ra állítja (a THR OFF marad), a kikapcsolása mindet OFF-ra; a Flight
+  Ready mind a négyet ki-be kapcsolja. NAV módban a WEP és SHLD OFF, SCM-re
+  váltva, a Master: SCM gombbal vagy kvantumugrás után a WEP, SHLD és THR
+  ONLINE. Az SCM/NAV gomb kiírja, melyik módban van.
+- Elrendezésekben a `state` új mezői: `with` (más csoportok beállítása) és
+  `off` (a kikapcsolt állapot felirata).
+
 ## 1.7.0-hu.3 (2026-11-14)
 
 - **A frissítő felismeri az újabb magyar kiadásokat:** eddig az 1.7.0-hu.2-t

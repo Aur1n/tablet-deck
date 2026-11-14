@@ -439,6 +439,8 @@
     const s = btn.state;
     states[s.group] = typeof s.set === "boolean" ? s.set : !states[s.group];
     showStates(s.group);
+    const linked = s.with && s.with[states[s.group] ? "on" : "off"];
+    for (const [group, value] of Object.entries(linked || {})) if (typeof value === "boolean") { states[group] = value; showStates(group); }
   }
   function resetStates() {
     if (DEMO) { states = {}; showStates(); } else send({ t: "reset-states" });
