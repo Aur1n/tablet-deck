@@ -5,6 +5,15 @@ section becomes the notes of its
 [GitHub release](https://github.com/nodieCode/tablet-deck/releases), so add one
 before tagging a release.
 
+## 1.7.0-hu.2 (2026-11-14)
+
+- **A Star Citizen a `Games` mappában is megtalálható:** a telepítő és a szerver
+  most a meghajtó gyökerében és a `Games` mappában lévő `StarCitizen` mappát is
+  keresi (pl. `D:\Games\StarCitizen`). Így a telepítő fel tudja ajánlani a
+  keybind profilt, és a játékban átállított billentyűket a gombok is követik.
+- Ha a beállítások egy korábbi indításkor a saját kiosztásod nélkül mentődtek el,
+  a szerver most utólag hozzáadja, amint megtalálja.
+
 ## 1.7.0-hu.1 (2026-11-14)
 
 - **Magyar nyelv:** a deck és a PC-s ablak magyarul is megjelenik. A tableten a

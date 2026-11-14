@@ -74,12 +74,14 @@ const VERSION = (() => { try { return JSON.parse(readBundled("package.json")).ve
 
 // ---------- config ----------
 
-// Finds the player's actionmaps.xml in the usual Star Citizen install folders.
+// Finds the player's actionmaps.xml in the usual Star Citizen install folders, and in a
+// StarCitizen folder straight on a drive or under Games (e.g. D:\Games\StarCitizen).
 function findActionmaps() {
   const sub = "StarCitizen/LIVE/user/client/0/Profiles/default/actionmaps.xml";
   const roots = [];
   for (const drive of "CDEFGH") {
-    roots.push(`${drive}:/Program Files/Roberts Space Industries`, `${drive}:/Roberts Space Industries`, `${drive}:/RSI`, `${drive}:/Games/Roberts Space Industries`);
+    roots.push(`${drive}:/Program Files/Roberts Space Industries`, `${drive}:/Roberts Space Industries`, `${drive}:/RSI`, `${drive}:/Games/Roberts Space Industries`,
+      `${drive}:/Games`, `${drive}:`);
   }
   return roots.map((r) => `${r}/${sub}`).find((p) => fs.existsSync(p)) || null;
 }
@@ -97,6 +99,11 @@ function loadConfig() {
     // loading a profile in-game copies it there, and later rebinds land there too.
     config.actionmaps = ["keybinds/TabletDeck-StarCitizen.xml", findActionmaps()].filter(Boolean);
     changed = true;
+  } else if (Array.isArray(config.actionmaps) && config.actionmaps.length === 1 && config.actionmaps[0] === "keybinds/TabletDeck-StarCitizen.xml") {
+    // Saved before the player's file could be found (e.g. a game folder older versions
+    // didn't search): add it once it turns up.
+    const found = findActionmaps();
+    if (found) { config.actionmaps.push(found); changed = true; }
   }
   if (!config.tapMs) { config.tapMs = 60; changed = true; }
   if (config.onlyWhenGameFocused === undefined) { config.onlyWhenGameFocused = true; changed = true; }

@@ -102,18 +102,20 @@ var
 function FindStarCitizen(): String;
 var
   Drive, I: Integer;
-  Roots: array[0..3] of String;
+  Roots: array[0..5] of String;
 begin
   Result := '';
-  Roots[0] := 'Program Files\Roberts Space Industries';
-  Roots[1] := 'Roberts Space Industries';
-  Roots[2] := 'RSI';
-  Roots[3] := 'Games\Roberts Space Industries';
+  Roots[0] := 'Program Files\Roberts Space Industries\';
+  Roots[1] := 'Roberts Space Industries\';
+  Roots[2] := 'RSI\';
+  Roots[3] := 'Games\Roberts Space Industries\';
+  Roots[4] := 'Games\';
+  Roots[5] := '';
   for Drive := Ord('C') to Ord('H') do
-    for I := 0 to 3 do
-      if DirExists(Chr(Drive) + ':\' + Roots[I] + '\StarCitizen\LIVE') then
+    for I := 0 to 5 do
+      if DirExists(Chr(Drive) + ':\' + Roots[I] + 'StarCitizen\LIVE') then
       begin
-        Result := Chr(Drive) + ':\' + Roots[I] + '\StarCitizen\LIVE';
+        Result := Chr(Drive) + ':\' + Roots[I] + 'StarCitizen\LIVE';
         Exit;
       end;
 end;
