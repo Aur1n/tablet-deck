@@ -5,6 +5,12 @@ section becomes the notes of its
 [GitHub release](https://github.com/nodieCode/tablet-deck/releases), so add one
 before tagging a release.
 
+## 1.7.0-hu.3 (2026-11-14)
+
+- **A frissítő felismeri az újabb magyar kiadásokat:** eddig az 1.7.0-hu.2-t
+  ugyanannak látta, mint az 1.7.0-hu.1-et. Ezt a verziót még kézzel kell
+  telepíteni; a következő magyar kiadásokat már az app ajánlja fel.
+
 ## 1.7.0-hu.2 (2026-11-14)
 
 - **A Star Citizen a `Games` mappában is megtalálható:** a telepítő és a szerver

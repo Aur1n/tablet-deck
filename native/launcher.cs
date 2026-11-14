@@ -2226,6 +2226,10 @@ class DeckWindow : Form
     static Version ParseVersion(string text)
     {
         string v = (text ?? "").Trim().TrimStart('v', 'V');
+        // The Hungarian fork's builds, "1.7.0-hu.3", count as 1.7.0.3: after 1.7.0 and the
+        // earlier -hu builds, before 1.7.1.
+        var hu = System.Text.RegularExpressions.Regex.Match(v, @"^(\d+\.\d+\.\d+)-hu\.(\d+)$");
+        if (hu.Success) v = hu.Groups[1].Value + "." + hu.Groups[2].Value;
         int cut = v.IndexOfAny(new[] { '-', '+', ' ' });
         if (cut >= 0) v = v.Substring(0, cut);
         Version result;
